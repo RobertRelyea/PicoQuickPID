@@ -2,6 +2,9 @@
 #ifndef QuickPID_h
 #define QuickPID_h
 
+#include "pico/stdlib.h"
+//#include "hardware/clocks.h"
+
 class QuickPID {
 
   public:
@@ -91,6 +94,8 @@ class QuickPID {
     float outputSum;          // Internal integral sum
 
   private:
+
+    float constrain(float x, float a, float b);  // No more arduino :/
 
     float dispKp = 0;   // for defaults and display
     float dispKi = 0;

@@ -4,12 +4,6 @@
    Based on the Arduino PID_v1 Library. Licensed under the MIT License.
  **********************************************************************************/
 
-#if ARDUINO >= 100
-#include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
-
 #include "QuickPID.h"
 
 QuickPID::QuickPID() {}
@@ -36,7 +30,7 @@ QuickPID::QuickPID(float* Input, float* Output, float* Setpoint,
   QuickPID::SetControllerDirection(Action);
   QuickPID::SetTunings(Kp, Ki, Kd, pMode, dMode, iAwMode);
 
-  lastTime = micros() - sampleTimeUs;
+  lastTime = time_us_32() - sampleTimeUs;
 }
 
 /* Constructor *********************************************************************
@@ -72,7 +66,7 @@ QuickPID::QuickPID(float* Input, float* Output, float* Setpoint)
  **********************************************************************************/
 bool QuickPID::Compute() {
   if (mode == Control::manual) return false;
-  uint32_t now = micros();
+  uint32_t now = time_us_32();
   uint32_t timeChange = (now - lastTime);
   if (mode == Control::timer || timeChange >= sampleTimeUs) {
 
@@ -288,4 +282,12 @@ uint8_t QuickPID::GetDmode() {
 }
 uint8_t QuickPID::GetAwMode() {
   return static_cast<uint8_t>(iawmode);
+}
+
+float QuickPID::constrain(float x, float a, float b){
+    if (x < a)
+      return a;
+    if (x > b)
+      return b;
+    return x;
 }
